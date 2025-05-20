@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестер API OpenWeatherMap</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        // Вставьте сюда код из артефакта (который вы скачали)
+        
+        const ApiTester = () => {
+          const [apiKey, setApiKey] = useState('');
+          const [response, setResponse] = useState(null);
+          const [loading, setLoading] = useState(false);
+          const [error, setError] = useState(null);
+
+          const testApi = async () => {
+            if (!apiKey.trim()) {
+              setError('Пожалуйста, введите API ключ');
+              return;
+            }
+
+            setLoading(true);
+            setError(null);
+            setResponse(null);
+
+            try {
+              const url = `https://api.openweathermap.org/data/2.5/weather?q=Moscow&appid=${apiKey}&units=metric&lang=ru`;
+              
+              console.log('Тестируем URL:', url);
+              
+              const response = await fetch(url);
+              const data = await response.json();
+              
+              if (response.ok) {
+                setResponse({
+                  status: response.status,
+                  data: data
+                });
+              } else {
+                setError(`Ошибка API (${response.status}): ${data.message || 'Неизвестная ошибка'}`);
+                setResponse({
+                  status: response.status,
+                  data: data
+                });
+              }
+            } catch (err) {
+              setError(`Ошибка запроса: ${err.message}`);
+            } finally {
+              setLoading(false);
+            }
+          };
+
+          return (
+            <div className="p-4 max-w-xl mx-auto bg-white rounded-lg shadow-md">
+              <h1 className="text-xl font-bold mb-4">Тестер API OpenWeatherMap</h1>
+              
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">Ваш API Ключ:</label>
+                <input 
+                  type="text" 
+                  value={apiKey} 
+                  onChange={(e) => setApiKey(e.target.value)} 
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Введите ваш API ключ OpenWeatherMap"
+                />
+              </div>
+              
+              <button 
+                onClick={testApi} 
+                disabled={loading}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-blue-300"
+              >
+                {loading ? 'Проверяем...' : 'Проверить API ключ'}
+              </button>
+              
+              {error && (
+                <div className="mt-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700">
+                  <p className="font-bold">Ошибка</p>
+                  <p>{error}</p>
+                </div>
+              )}
+              
+              {response && (
+                <div className="mt-4">
+                  <h2 className="text-lg font-semibold mb-2">Результат запроса:</h2>
+                  <div className="bg-gray-100 p-3 rounded overflow-auto">
+                    <p><strong>Статус:</strong> {response.status}</p>
+                    <pre className="text-xs mt-2 whitespace-pre-wrap">
+                      {JSON.stringify(response.data, null, 2)}
+                    </pre>
+                  </div>
+                  
+                  {response.status === 200 && (
+                    <div className="mt-4 p-3 bg-green-100 border-l-4 border-green-500 text-green-700">
+                      <p className="font-bold">✅ API ключ работает!</p>
+                      <p>Вы успешно получили данные о погоде.</p>
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              <div className="mt-6 text-sm text-gray-600">
+                <h3 className="font-semibold">Возможные ошибки:</h3>
+                <ul className="list-disc pl-5 mt-1">
+                  <li><strong>401 Unauthorized</strong> - API ключ неверный или еще не активирован</li>
+                  <li><strong>429 Too Many Requests</strong> - превышен лимит запросов</li>
+                  <li><strong>404 Not Found</strong> - город не найден</li>
+                </ul>
+                <p className="mt-2"><strong>Примечание:</strong> Новым API ключам может потребоваться до 2 часов для активации.</p>
+              </div>
+            </div>
+          );
+        };
+
+        // Рендеринг компонента
+        const { useState } = React;
+        ReactDOM.render(<ApiTester />, document.getElementById('root'));
+    </script>
+</body>
+</html>

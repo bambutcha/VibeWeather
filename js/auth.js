@@ -50,6 +50,8 @@ async function handleLogin(event) {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
     
+    console.log("Попытка входа с:", { email, password });
+    
     // Получаем элемент для отображения ошибок
     const errorElement = document.getElementById('error-message');
     
@@ -70,7 +72,9 @@ async function handleLogin(event) {
         submitButton.disabled = true;
         
         // Отправляем запрос к API
+        console.log("Отправка запроса к", CONFIG.ENDPOINTS.LOGIN);
         const response = await login(email, password);
+        console.log("Ответ от сервера:", response);
         
         // Проверяем, есть ли токен в ответе
         if (response.token) {
@@ -88,8 +92,8 @@ async function handleLogin(event) {
         }
     } catch (error) {
         // Обрабатываем ошибки сети или другие исключения
+        console.error("Ошибка входа:", error);
         showError('error-message', 'Не удалось подключиться к серверу. Пожалуйста, проверьте подключение к интернету.');
-        console.error('Ошибка авторизации:', error);
     } finally {
         // Восстанавливаем состояние кнопки
         const submitButton = document.querySelector('button[type="submit"]');
@@ -113,10 +117,12 @@ async function handleLogin(event) {
 async function login(email, password) {
     try {
         console.log('Отправляемые данные:', { email, password });
+        
         const response = await fetch(CONFIG.ENDPOINTS.LOGIN, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-api-key': 'reqres-free-v1'
             },
             body: JSON.stringify({ 
                 email: email, 
@@ -125,17 +131,21 @@ async function login(email, password) {
         });
         
         console.log('Ответ от сервера:', response);
+        console.log('Статус ответа:', response.status);
         
         // Проверяем статус ответа
         if (!response.ok) {
             const errorData = await response.json();
+            console.error('Ошибка API:', errorData);
             return { 
                 error: errorData.error || 'Ошибка авторизации. Пожалуйста, проверьте данные и попробуйте снова.' 
             };
         }
         
         // Возвращаем данные ответа
-        return await response.json();
+        const data = await response.json();
+        console.log('Данные ответа:', data);
+        return data;
     } catch (error) {
         console.error('Ошибка при запросе к API:', error);
         return { error: 'Не удалось подключиться к серверу. Пожалуйста, проверьте подключение к интернету.' };

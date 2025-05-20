@@ -1,16 +1,16 @@
 /* Основные переменные */
 :root {
-    /* Цветовая схема */
-    --primary-color: #3498db;
-    --primary-dark: #2980b9;
-    --secondary-color: #f1c40f;
-    --text-color: #333333;
+    /* Обновленная цветовая схема */
+    --primary-color: #4a90e2;
+    --primary-dark: #3a7bd5;
+    --secondary-color: #ffd43b;
+    --text-color: #2c3e50;
     --text-light: #ffffff;
-    --background-color: #f5f5f5;
+    --background-color: #f5f7fa;
     --card-background: #ffffff;
     --error-color: #e74c3c;
     --success-color: #2ecc71;
-    --border-color: #dddddd;
+    --border-color: #e1e8ed;
     
     /* Размеры и отступы */
     --spacing-xs: 0.25rem;
@@ -32,10 +32,10 @@
     --border-radius-md: 8px;
     --border-radius-lg: 12px;
     
-    /* Тени */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    /* Более глубокие тени */
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 15px 25px rgba(0, 0, 0, 0.1);
   }
   
   /* Сброс стилей */
@@ -75,13 +75,17 @@
   /* Заголовки */
   h1 {
     font-size: var(--font-size-xl);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: 0;
     color: var(--primary-color);
+    font-weight: 700;
+    letter-spacing: -0.5px;
   }
   
   h2 {
     font-size: var(--font-size-large);
     margin-bottom: var(--spacing-md);
+    color: var(--text-color);
+    font-weight: 600;
   }
   
   /* Общие компоненты */
@@ -98,16 +102,19 @@
     text-decoration: none;
     font-size: var(--font-size-normal);
     font-weight: 500;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
   .btn:hover {
     background-color: var(--primary-dark);
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
   
   .btn:active {
     transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
   
   .btn-primary {
@@ -117,17 +124,40 @@
   .btn-secondary {
     background-color: var(--secondary-color);
     color: var(--text-color);
+    font-weight: 600;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #f9ca24;
   }
   
   .btn-outline {
     background-color: transparent;
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
+    box-shadow: none;
   }
   
   .btn-outline:hover {
     background-color: var(--primary-color);
     color: var(--text-light);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Специфические кнопки */
+  #logout-button {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-weight: 600;
+    border-radius: var(--border-radius-md);
+    transition: all 0.3s ease;
+  }
+  
+  #refresh-button {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: var(--font-size-small);
+    font-weight: 600;
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
   /* Формы */
@@ -138,6 +168,13 @@
     background-color: var(--card-background);
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-md);
+    border-top: 4px solid var(--primary-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .form-container:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
   }
   
   .form-group {
@@ -148,6 +185,7 @@
     display: block;
     margin-bottom: var(--spacing-xs);
     font-weight: 500;
+    color: var(--text-color);
   }
   
   .form-control {
@@ -156,12 +194,13 @@
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     font-size: var(--font-size-normal);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
   
   .form-control:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
   }
   
   /* Сообщения */
@@ -173,6 +212,7 @@
     padding: var(--spacing-sm);
     border-radius: var(--border-radius-sm);
     margin-bottom: var(--spacing-md);
+    font-weight: 500;
   }
   
   .success-message {
@@ -183,19 +223,20 @@
     padding: var(--spacing-sm);
     border-radius: var(--border-radius-sm);
     margin-bottom: var(--spacing-md);
+    font-weight: 500;
   }
   
   /* Загрузчик */
-.loader {
+  .loader {
     display: none;
     text-align: center;
     margin: var(--spacing-md) auto;
     position: relative;
     width: 60px;
     height: 60px;
-}
-
-.loader::after {
+  }
+  
+  .loader::after {
     content: '';
     display: block;
     width: 40px;
@@ -208,24 +249,24 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-@keyframes loader {
+  }
+  
+  @keyframes loader {
     0% {
-        transform: translate(-50%, -50%) rotate(0deg);
+      transform: translate(-50%, -50%) rotate(0deg);
     }
     100% {
-        transform: translate(-50%, -50%) rotate(360deg);
+      transform: translate(-50%, -50%) rotate(360deg);
     }
-}
-
-/* Стили для состояния загрузки */
-.loading-state .weather-card {
+  }
+  
+  /* Стили для состояния загрузки */
+  .loading-state .weather-card {
     opacity: 0.7;
     pointer-events: none;
-}
-
-.refresh-spinner {
+  }
+  
+  .refresh-spinner {
     display: inline-block;
     width: 16px;
     height: 16px;
@@ -235,12 +276,43 @@
     animation: spin 1s ease-in-out infinite;
     margin-right: 8px;
     vertical-align: middle;
-}
-
-@keyframes spin {
+  }
+  
+  @keyframes spin {
     to { transform: rotate(360deg); }
-}
-
+  }
+  
+  /* Хедер */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  /* Погода */
+  .weather-container {
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  .weather-card {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-lg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: var(--spacing-md);
+    border-left: 4px solid var(--primary-color);
+  }
+  
+  .weather-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  
   .weather-header {
     display: flex;
     justify-content: space-between;
@@ -252,52 +324,80 @@
     display: flex;
     align-items: center;
     margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
   }
   
   .weather-icon {
     width: 80px;
     height: 80px;
     margin-right: var(--spacing-md);
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.1));
   }
   
   .weather-description {
     font-size: var(--font-size-medium);
     text-transform: capitalize;
+    color: var(--text-color);
+    font-weight: 500;
   }
   
   .temperature {
-    font-size: var(--font-size-xl);
+    font-size: calc(var(--font-size-xl) * 1.2);
     font-weight: bold;
     color: var(--primary-color);
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
   }
   
   .weather-details {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-md);
+    background-color: rgba(74, 144, 226, 0.05);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-md);
   }
   
   .weather-detail-item {
     display: flex;
     flex-direction: column;
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    transition: background-color 0.3s ease;
+  }
+  
+  .weather-detail-item:hover {
+    background-color: rgba(74, 144, 226, 0.1);
   }
   
   .detail-label {
     font-size: var(--font-size-small);
-    color: #666;
+    color: #667788;
+    margin-bottom: var(--spacing-xs);
   }
   
   .detail-value {
     font-size: var(--font-size-normal);
-    font-weight: 500;
+    font-weight: 600;
+    color: var(--text-color);
   }
   
-  /* Хедер */
-  header {
+  /* Информация об обновлении */
+  .weather-update {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--spacing-lg);
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm);
+    background-color: rgba(74, 144, 226, 0.03);
+    border-radius: var(--border-radius-md);
+  }
+  
+  .weather-update p {
+    color: #667788;
+    font-size: var(--font-size-small);
   }
   
   /* Футер */
@@ -306,16 +406,18 @@
     padding: var(--spacing-md) 0;
     margin-top: auto;
     font-size: var(--font-size-small);
-    color: #666;
+    color: #667788;
+    border-top: 1px solid var(--border-color);
   }
-
+  
   /* Дополнительные стили для подсказки входа */
-.login-hint {
+  .login-hint {
     margin-top: var(--spacing-lg);
     padding: var(--spacing-md);
-    background-color: rgba(52, 152, 219, 0.1);
+    background-color: rgba(74, 144, 226, 0.05);
     border-radius: var(--border-radius-sm);
     font-size: var(--font-size-small);
+    border-left: 3px solid var(--secondary-color);
   }
   
   .login-hint p {
@@ -325,24 +427,3 @@
   .login-hint p:last-child {
     margin-bottom: 0;
   }
-  
-  /* Информация об обновлении */
-  .weather-update {
-    text-align: right;
-    font-size: var(--font-size-small);
-    color: #666;
-    margin-top: var(--spacing-sm);
-  }
-
-  /* Стили для кнопки обновления */
-.weather-update {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: var(--spacing-md);
-}
-
-#refresh-button {
-    padding: var(--spacing-xs) var(--spacing-md);
-    font-size: var(--font-size-small);
-}

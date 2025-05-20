@@ -90,13 +90,16 @@ async function initWeatherPage() {
  * @returns {Promise<Object>} - Данные о погоде
  */
 async function getWeather(city = CONFIG.DEFAULTS.CITY) {
+    console.log("Начало функции getWeather");
+    console.log("CONFIG:", CONFIG);
     const apiKey = CONFIG.WEATHER_API_KEY;
+    console.log("API Key:", apiKey);
     const language = CONFIG.DEFAULTS.LANGUAGE;
     const units = CONFIG.DEFAULTS.UNITS;
     
     try {
-        // Формируем URL для запроса
         const url = `${CONFIG.ENDPOINTS.WEATHER}?q=${city}&appid=${apiKey}&units=${units}&lang=${language}`;
+        console.log("URL запроса:", url);
         
         // Выполняем запрос
         const response = await fetch(url);
