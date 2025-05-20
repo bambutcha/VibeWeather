@@ -38,6 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
  * Обрабатывает процесс авторизации
  * @param {Event} event - Событие отправки формы
  */
+/**
+ * Обрабатывает процесс авторизации
+ * @param {Event} event - Событие отправки формы
+ */
 async function handleLogin(event) {
     // Предотвращаем стандартное поведение формы
     event.preventDefault();
@@ -100,20 +104,41 @@ async function handleLogin(event) {
  * @param {string} password - Пароль пользователя
  * @returns {Promise<Object>} - Ответ от API
  */
+/**
+ * Выполняет запрос к API для авторизации
+ * @param {string} email - Email пользователя
+ * @param {string} password - Пароль пользователя
+ * @returns {Promise<Object>} - Ответ от API
+ */
 async function login(email, password) {
     try {
+        console.log('Отправляемые данные:', { email, password });
         const response = await fetch(CONFIG.ENDPOINTS.LOGIN, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ 
+                email: email, 
+                password: password 
+            })
         });
+        
+        console.log('Ответ от сервера:', response);
+        
+        // Проверяем статус ответа
+        if (!response.ok) {
+            const errorData = await response.json();
+            return { 
+                error: errorData.error || 'Ошибка авторизации. Пожалуйста, проверьте данные и попробуйте снова.' 
+            };
+        }
         
         // Возвращаем данные ответа
         return await response.json();
     } catch (error) {
-        throw error;
+        console.error('Ошибка при запросе к API:', error);
+        return { error: 'Не удалось подключиться к серверу. Пожалуйста, проверьте подключение к интернету.' };
     }
 }
 
