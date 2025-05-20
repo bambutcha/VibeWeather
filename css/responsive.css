@@ -1,1 +1,71 @@
-/* Пока пустой файл для адаптивных стилей */
+/* Адаптивные стили */
+
+/* Для мобильных устройств (до 576px) */
+@media (max-width: 576px) {
+    .container {
+      padding: var(--spacing-sm);
+    }
+    
+    h1 {
+      font-size: 1.7rem;
+    }
+    
+    .weather-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .temperature {
+      margin-top: var(--spacing-sm);
+    }
+    
+    .weather-details {
+      grid-template-columns: 1fr;
+    }
+    
+    .form-container {
+      padding: var(--spacing-md);
+    }
+  }
+  
+  /* Для планшетов (576px - 992px) */
+  @media (min-width: 576px) and (max-width: 992px) {
+    .container {
+      padding: var(--spacing-md);
+    }
+    
+    .weather-details {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  /* Для средних десктопов (992px - 1200px) */
+  @media (min-width: 992px) and (max-width: 1200px) {
+    .container {
+      max-width: 960px;
+    }
+  }
+  
+  /* Для больших экранов (больше 1200px) */
+  @media (min-width: 1200px) {
+    .container {
+      max-width: 1140px;
+    }
+  }
+  
+  /* Обеспечение читабельности на очень маленьких экранах */
+  @media (max-width: 320px) {
+    body {
+      font-size: 14px;
+    }
+    
+    .weather-icon {
+      width: 60px;
+      height: 60px;
+    }
+    
+    .btn {
+      padding: 8px 12px;
+    }
+  }
+  
