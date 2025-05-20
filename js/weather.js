@@ -4,15 +4,23 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.location.pathname.endsWith('weather.html')) {
         // Инициализируем загрузку данных о погоде
         initWeatherPage();
+        
+        // Добавляем обработчик для кнопки обновления
+        const refreshButton = document.getElementById('refresh-button');
+        if (refreshButton) {
+            refreshButton.addEventListener('click', initWeatherPage);
+        }
     }
 });
 
 /**
  * Инициализирует страницу погоды
  */
+/**
+ * Инициализирует страницу погоды
+ */
 async function initWeatherPage() {
     // Если пользователь не авторизован, перенаправляем на страницу входа
-    // (дополнительная проверка, даже если она также есть в auth.js)
     if (!isAuthenticated()) {
         window.location.href = 'index.html';
         return;
@@ -22,11 +30,27 @@ async function initWeatherPage() {
     const weatherContainer = document.getElementById('weather-container');
     const loader = document.getElementById('loader');
     const errorElement = document.getElementById('error-message');
+    const refreshButton = document.getElementById('refresh-button');
+    
+    // Сохраняем исходный текст кнопки
+    let originalButtonText = '';
+    if (refreshButton) {
+        originalButtonText = refreshButton.textContent;
+        refreshButton.innerHTML = '<span class="refresh-spinner"></span> Обновление...';
+        refreshButton.disabled = true;
+    }
     
     try {
-        // Показываем индикатор загрузки
-        showElement('loader');
-        hideElement('weather-container');
+        // Показываем индикатор загрузки при первой загрузке
+        if (!document.getElementById('temperature').textContent.trim() || 
+            document.getElementById('temperature').textContent === '--°C') {
+            showElement('loader');
+            hideElement('weather-container');
+        } else {
+            // Если данные уже были загружены, просто добавляем класс loading-state
+            weatherContainer.classList.add('loading-state');
+        }
+        
         hideElement('error-message');
         
         // Получаем данные о погоде
@@ -40,14 +64,26 @@ async function initWeatherPage() {
     } catch (error) {
         // Если произошла ошибка, показываем сообщение
         console.error('Ошибка при получении данных о погоде:', error);
-        showError('error-message', 'Не удалось получить данные о погоде. Пожалуйста, проверьте подключение к интернету и попробуйте снова.');
+        showError('error-message', error.message || 'Не удалось получить данные о погоде. Пожалуйста, проверьте подключение к интернету и попробуйте снова.');
     } finally {
         // Скрываем индикатор загрузки
         hideElement('loader');
         showElement('weather-container');
+        weatherContainer.classList.remove('loading-state');
+        
+        // Восстанавливаем кнопку
+        if (refreshButton) {
+            refreshButton.textContent = originalButtonText;
+            refreshButton.disabled = false;
+        }
     }
 }
 
+/**
+ * Получает данные о погоде с API
+ * @param {string} city - Город, для которого нужно получить погоду
+ * @returns {Promise<Object>} - Данные о погоде
+ */
 /**
  * Получает данные о погоде с API
  * @param {string} city - Город, для которого нужно получить погоду
@@ -68,12 +104,28 @@ async function getWeather(city = CONFIG.DEFAULTS.CITY) {
         // Проверяем статус ответа
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || 'Ошибка при получении данных о погоде');
+            
+            // Обрабатываем различные коды ошибок
+            switch (errorData.cod) {
+                case '401':
+                    throw new Error('Неверный API ключ. Пожалуйста, проверьте настройки приложения.');
+                case '404':
+                    throw new Error('Город не найден. Пожалуйста, проверьте название города.');
+                case '429':
+                    throw new Error('Превышен лимит запросов к API. Пожалуйста, попробуйте позже.');
+                default:
+                    throw new Error(errorData.message || 'Ошибка при получении данных о погоде');
+            }
         }
         
         // Возвращаем данные
         return await response.json();
     } catch (error) {
+        // Обрабатываем ошибки сети
+        if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+            throw new Error('Не удалось подключиться к серверу погоды. Пожалуйста, проверьте подключение к интернету.');
+        }
+        
         throw error;
     }
 }
