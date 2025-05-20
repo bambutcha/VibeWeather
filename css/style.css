@@ -296,4 +296,28 @@
     font-size: var(--font-size-small);
     color: #666;
   }
+
+  /* Дополнительные стили для подсказки входа */
+.login-hint {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: rgba(52, 152, 219, 0.1);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-small);
+  }
   
+  .login-hint p {
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .login-hint p:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Информация об обновлении */
+  .weather-update {
+    text-align: right;
+    font-size: var(--font-size-small);
+    color: #666;
+    margin-top: var(--spacing-sm);
+  }

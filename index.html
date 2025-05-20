@@ -14,7 +14,32 @@
             <h1>VibeWeather</h1>
         </header>
         <main>
-            <!-- Здесь будет форма авторизации -->
+            <div class="form-container">
+                <h2>Вход в систему</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <input type="password" id="password" class="form-control" required>
+                    </div>
+                    
+                    <div id="error-message" class="error-message"></div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Войти</button>
+                    </div>
+                </form>
+                
+                <div class="login-hint">
+                    <p>Для тестирования используйте:</p>
+                    <p><strong>Email:</strong> eve.holt@reqres.in</p>
+                    <p><strong>Пароль:</strong> cityslicka</p>
+                </div>
+            </div>
         </main>
         <footer>
             <p>&copy; 2025 VibeWeather</p>
